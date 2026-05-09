@@ -1,0 +1,23 @@
+﻿services:
+  webapp:
+    image: makaroshkina/anekdotapp:latest
+    container_name: anekdotapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${EXTERNAL_PORT}:8080"
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - ASPNETCORE_URLS=http://+:8080    
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/config"]
+      interval: 40s
+      timeout: 15s
+      retries: 5
+      start_period: 40s    
+    env_file:
+      - .env
+
+ 
